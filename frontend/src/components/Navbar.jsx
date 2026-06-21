@@ -1,26 +1,18 @@
 import { Link } from "react-router-dom"
+import logo from "../assets/logo.svg";
 
 const Navbar = () => {
     return (
         <header className="w-full bg-white shadow-sm border-b border-gray-200">
             <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                 
-                <Link to="/" className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-6 h-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
+                 <Link to="/" className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                        <img
+                            src={logo}
+                            alt="VoteApp logo"
+                            className="w-6 h-6 object-contain brightness-0 invert"
+                        />
                     </div>
 
                     <span className="text-2xl font-bold text-gray-900">
