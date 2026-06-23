@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import logo from "../assets/logo.svg";
+import { signup } from "../services/auth";
+import { saveAuthData } from "../utils/authStorage";
+
 
 const SignUp = () => {
+    const {enqueueSnackbar} = useSnackbar();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -27,13 +32,21 @@ const SignUp = () => {
         setLoading(true);
 
         try {
-            console.log(formData);
+            const authData = await signup(formData);
 
-            // Tu później dodasz request do backendu, np. registerUser(formData)
-            // navigate("/login");
+            saveAuthData(authData);
 
+            enqueueSnackbar("Account created", {
+            variant: "success",
+            autoHideDuration: 5000,
+            });
+
+            navigate("/dashboard");
         } catch (error) {
-            console.error("Sign up error:", error);
+            enqueueSnackbar("Sign up failed", {
+            variant: "error",
+            autoHideDuration: 5000,
+            });
         } finally {
             setLoading(false);
         }

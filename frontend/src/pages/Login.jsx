@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import logo from "../assets/logo.svg";
-
+import { login } from "../services/auth";
+import { saveAuthData } from "../utils/authStorage";
 
 const Login = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -26,13 +29,21 @@ const Login = () => {
         setLoading(true);
 
         try {
-            console.log(formData);
+            const authData = await login(formData);
 
-            // Tu później dodasz request do backendu, np. loginUser(formData)
-            // navigate("/");
+            saveAuthData(authData);
 
+            enqueueSnackbar("Logged in", {
+            variant: "success",
+            autoHideDuration: 5000,
+            });
+
+            navigate("/dashboard");
         } catch (error) {
-            console.error("Login error:", error);
+            enqueueSnackbar("Sign in failed", {
+            variant: "error",
+            autoHideDuration: 5000,
+            });
         } finally {
             setLoading(false);
         }
