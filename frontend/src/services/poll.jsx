@@ -16,6 +16,13 @@ export const getMyPolls = async () => {
 };
 
 export const deletePollById = async (id) => {
-  const response = await axiosInstance.delete(`/api/user/my-poll/${id}`);
+  const response = await axiosInstance.delete(`/api/user/poll/${id}`);
   return response.data;
+};
+
+export const votePoll = async (pollId, optionId) => {
+    return await axiosInstance.post(`/api/user/poll/${pollId}/vote`, {
+        optionId,
+    });
+    return response.data;
 };
