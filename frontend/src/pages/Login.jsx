@@ -100,12 +100,7 @@ const Login = () => {
                                 Password
                             </label>
 
-                            <button
-                                type="button"
-                                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition"
-                            >
-                                Forgot password?
-                            </button>
+                            
                         </div>
 
                         <input

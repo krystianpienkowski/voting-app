@@ -77,13 +77,12 @@ const CreatePoll = () => {
         }
 
         try {
-            console.log(formData);
 
             const obj = {
                 question: formData.question,
                 options: formData.options,
-                expiredAt: formData.expiredAt
-            }
+                expiredAt: selectedDate.toISOString()
+            };
 
             const response = await postPoll(obj);
 

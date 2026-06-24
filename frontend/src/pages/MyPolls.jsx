@@ -14,7 +14,6 @@ const ViewMyPolls = () => {
         try {
             const response = await getMyPolls();
 
-            console.log(response);
 
             const pollsData = Array.isArray(response)
                 ? response
@@ -64,18 +63,13 @@ const ViewMyPolls = () => {
             return "No expiration date";
         }
 
-        const normalizedDate = String(date)
-            .replace("Z", "")
-            .replace(/\.\d+/, "")
-            .replace(/[+-]\d{2}:?\d{2}$/, "");
-
-        const [day, time] = normalizedDate.split("T");
-
-        if (!day || !time) {
-            return date;
-        }
-
-        return `${day} ${time.slice(0, 5)}`;
+        return new Date(date).toLocaleString("pl-PL", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
     };
 
     const isExpired = (date) => {
@@ -83,12 +77,7 @@ const ViewMyPolls = () => {
             return false;
         }
 
-        const normalizedDate = String(date)
-            .replace("Z", "")
-            .replace(/\.\d+/, "")
-            .replace(/[+-]\d{2}:?\d{2}$/, "");
-
-        return new Date(normalizedDate) < new Date();
+        return new Date(date) < new Date();
     };
 
     return (

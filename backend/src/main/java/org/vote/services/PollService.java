@@ -34,13 +34,22 @@ public class PollService {
 
     public PollDTO getPollDTOInService(Poll poll) {
         User loggedInUser = jwtService.getLoggedInUser();
+
         PollDTO pollDTO = new PollDTO();
         pollDTO.setId(poll.getId());
         pollDTO.setQuestion(poll.getQuestion());
         pollDTO.setExpiredAt(poll.getExpiredAt());
         pollDTO.setExpired(poll.getExpiredAt() != null && poll.getExpiredAt().before(new Date()));
         pollDTO.setPostedDate(poll.getPostedDate());
-        pollDTO.setOptionsDTOS(poll.getOptions().stream().map(options -> this.getOptionsDTO(options, loggedInUser.getId(), poll.getId())).collect(Collectors.toList()));
+
+        pollDTO.setOptionsDTOS(
+                poll.getOptions()
+                        .stream()
+                        .map(options -> this.getOptionsDTO(options, loggedInUser.getId(), poll.getId()))
+                        .sorted(Comparator.comparing(OptionsDTO::getVoteCount).reversed())
+                        .collect(Collectors.toList())
+        );
+
         pollDTO.setTotalVoteCount(poll.getTotalVoteCount());
 
         User pollOwner = poll.getUser();
@@ -100,7 +109,16 @@ public class PollService {
     }
 
     public void deletePoll(Long id) {
-        pollRepository.deleteById(id);
+        User user = jwtService.getLoggedInUser();
+
+        Poll poll = pollRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Poll not found"));
+
+        if (!poll.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You can delete only your own polls");
+        }
+
+        pollRepository.delete(poll);
     }
 
     public List<PollDTO> getAllPolls() {
